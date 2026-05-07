@@ -1,73 +1,57 @@
-# React + TypeScript + Vite
+# ONA. - Point of Sale (POS) & Kitchen Display System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+ONA est une application moderne de point de vente (POS) conçue pour être hybride, rapide et réactive. Elle s'adapte parfaitement à deux environnements distincts : la restauration rapide (Restaurant) et la vente au détail (Market).
 
-Currently, two official plugins are available:
+## Fonctionnalités Principales
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+*   **Mode Hybride (Restaurant / Market) :** Un switch permet de basculer la logique métier. Les commandes "Restaurant" partent en préparation, tandis que les achats "Market" sont encaissés directement.
+*   **Terminal d'Encaissement Avancé :**
+    *   Gestion du panier en temps réel (quantités, suppression, vidage).
+    *   Paiement multi-méthodes : Carte Bancaire, Espèces (avec calcul automatique du rendu de monnaie et boutons de billets rapides) et Paiement Divisé (Espèces + Carte).
+*   **Système d'Affichage en Cuisine (KDS) :** Un écran dédié aux cuisiniers affiche les bons de commande en temps réel avec un bouton pour les marquer comme "Prêts".
+*   **Programme de Fidélité :** Création et recherche de clients, accumulation de points à chaque achat, et utilisation de réductions (ex: 200 pts = -5$).
+*   **Historique et Statistiques :** Suivi du chiffre d'affaires journalier, nombre de commandes, et possibilité de ré-afficher les tickets de caisse détaillés des transactions passées.
+*   **Sauvegarde Locale (Offline-first) :** L'état de l'application (panier, clients, commandes) est sauvegardé dans le `localStorage` du navigateur pour prévenir toute perte de données en cas d'actualisation.
+*   **Expérience Utilisateur (UX) :** Interface soignée avec animations (shadcn/ui), Mode Sombre/Clair, et design responsive.
 
-## React Compiler
+## Technologies Utilisées
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+**Front-end :**
+*   [React](https://reactjs.org/) (via Vite)
+*   [TypeScript](https://www.typescriptlang.org/) pour un typage strict et sécurisé.
+*   [Tailwind CSS](https://tailwindcss.com/) pour le style utilitaire.
+*   [shadcn/ui](https://ui.shadcn.com/) pour les composants d'interface accessibles.
+*   [Lucide React](https://lucide.dev/) pour l'iconographie.
 
-## Expanding the ESLint configuration
+**Back-end prévu (en cours d'intégration) :**
+*   FastAPI (Python)
+*   PostgreSQL
+*   Architecture orientée Plugins (NocoBase)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Installation et Démarrage (Local)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1.  **Cloner le dépôt :**
+    ```bash
+    git clone <ton-url-git>
+    cd <nom-du-dossier>
+    ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+2.  **Installer les dépendances :**
+    ```bash
+    npm install
+    ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+3.  **Lancer le serveur de développement :**
+    ```bash
+    npm run dev
+    ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+4.  Ouvrez votre navigateur sur `http://localhost:5173` (ou le port indiqué dans la console).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 💡 Architecture du Projet
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+L'application est centralisée autour de `App.tsx` qui gère les états globaux (Panier, Historique, KDS). Les composants sont découpés pour assurer une bonne maintenabilité :
+*   `Cart.tsx` : Logique d'encaissement et modales de paiement.
+*   `ProductGrid.tsx` : Affichage et filtrage du catalogue.
+*   `KitchenDisplay.tsx` : KDS pour la gestion des commandes en cours.
+*   `OrderHistory.tsx` : Tableau de bord et statistiques des ventes.
